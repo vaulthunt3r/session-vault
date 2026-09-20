@@ -1,0 +1,44 @@
+/* Readable type without enlarging every panel and margin. */
+:root{font-size:14px}
+.document-header{height:72px;padding:12px 20px}
+.eyebrow{margin-bottom:4px}
+.content,.history-content{padding:18px 20px}
+.conversation{max-width:1120px;padding:16px 20px}
+.message{margin-bottom:12px}.message-head{padding:10px 14px;font-size:14px;flex-wrap:wrap}
+.message-body{padding:0 14px 14px;font-size:15px;line-height:1.65}
+.message-body pre,.message-body code,details.tool pre{font-size:13px;line-height:1.65}
+.message-body p{margin:6px 0 10px}
+.button,.segmented button,.toolbar input,.toolbar select,.filter-wrap input,#archiveFilter{font-size:13px}
+.session-row{padding:9px 12px}.session-row .name{font-size:14px;line-height:1.45}
+.session-meta,.message-head time,.message-head .phase,.line-link,.history-card small,.history-card span,.branch-row small{font-size:12px}
+.panel-label,.section-label,.eyebrow,.context-box dt,.history-filters label,.history-disclaimer,.metric .label,.metric .tiny,.badge{font-size:12px;letter-spacing:.3px}
+.context-box dd,.outline button,.inspector-note,.source-path code,.settings-row code,.footer-note,.intro,.history-meta>span,.history-chapter summary small{font-size:13px;line-height:1.6}
+.intro{max-width:900px;margin-bottom:14px}.panel{padding:14px;margin-bottom:14px}
+.metrics{margin-bottom:16px}.metric{padding:12px 14px}.metric .value{margin:6px 0}
+.history-tabs,.history-meta{margin:10px 0}.history-disclaimer{padding:6px 10px;margin:8px 0 12px}
+.history-card{padding:10px;gap:5px}.history-card b,.branch-row b{font-size:14px}
+.branch-canvas{grid-template-columns:160px 1fr;min-width:420px}.branch-canvas svg{width:160px}
+.branch-row{height:82px;gap:5px}.history-chapter{padding:12px;margin:10px 0}
+.history-quote{font-size:14px}.lane-event,.lane strong,.lane-axis,.calendar-day small,.entity text{font-size:12px}
+.inspector{padding:14px}.context-box{margin-bottom:16px}.panel-label{margin-bottom:10px}
+.outline{margin-bottom:16px}.appearance-panel{margin:16px 0}.appearance-panel h3{margin-bottom:12px}
+.footer-note{margin-top:12px}.theme-preview{padding:12px}.palette-columns{margin-top:14px}
+.indicator-settings{display:grid;grid-template-columns:auto minmax(150px,230px);gap:10px 16px;align-items:center;margin-bottom:16px}
+.indicator-settings p,.indicator-legend{grid-column:1/-1;margin:0;font-size:13px;line-height:1.5}
+.indicator-legend{display:flex;flex-wrap:wrap;gap:8px 16px}.indicator-legend span{display:inline-flex;gap:7px;align-items:center}
+.indicator-legend i{width:9px;height:9px;border-radius:2px;background:var(--event-color,var(--blue))}
+/* Type text remains the primary meaning; color is an optional aid. */
+[class*="type-"]{--event-color:var(--blue)}
+:root[data-indicators=semantic] .type-decision,:root[data-indicators=semantic] .type-milestone{--event-color:var(--green)}
+:root[data-indicators=semantic] .type-task{--event-color:var(--purple)}
+:root[data-indicators=semantic] .type-bug{--event-color:var(--error)}
+:root[data-indicators=semantic] .type-tool,:root[data-indicators=semantic] .type-research{--event-color:var(--warn)}
+:root[data-indicators=semantic] .type-event,:root[data-indicators=semantic] .type-output,:root[data-indicators=semantic] .type-file,:root[data-indicators=semantic] .type-keyword{--event-color:var(--muted)}
+:root[data-indicators=semantic] .history-card,:root[data-indicators=semantic] .lane-event{background:color-mix(in srgb,var(--event-color) 7%,var(--pane))}
+:root[data-indicators=semantic] .entity rect{fill:color-mix(in srgb,var(--event-color) 9%,var(--raised))}
+:root[data-indicators=semantic] .metric .value{color:var(--event-color)}
+:root[data-indicators=semantic] .tag[class*="type-"]{color:var(--event-color);border-color:var(--event-color)}
+@media(max-width:1050px){.content,.history-content,.conversation{padding:14px}.indicator-settings{grid-template-columns:1fr}.record-actions{flex-wrap:wrap}.topbar{gap:8px}}
+
+.sidebar-title{flex-wrap:wrap;gap:6px;padding:10px 12px 6px;letter-spacing:.7px}.vault-actions{display:flex;align-items:center;gap:3px;margin-left:auto}.sidebar-title #import{font:12px var(--mono);letter-spacing:0;border:1px solid var(--line);padding:5px 6px}.history-columns .pager{flex-wrap:wrap}
+.time-lane{border-top:1px solid var(--line);padding:10px 12px 12px}.time-lane h3{position:sticky;left:12px;display:table;background:var(--pane);font-size:13px;margin:0 0 8px;padding:3px 6px}.time-buckets{display:grid;gap:12px;align-items:start}.time-bucket{height:108px;min-width:0;display:flex;flex-direction:column;gap:7px;text-align:left;border:1px solid var(--line);border-left:3px solid var(--event-color,var(--blue));background:var(--raised);padding:10px}.time-bucket small{font:12px var(--mono);white-space:nowrap}.time-bucket b{font-size:14px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}.time-bucket span{font-size:12px;color:var(--muted);margin-top:auto}.lane-axis{padding:12px;gap:12px;flex-wrap:wrap}.lane-group{border-top:1px solid var(--line);margin-top:16px;padding-top:8px;scroll-margin-top:12px}.lane-group h3{margin:0;flex:1}.lane-group .history-card{text-align:left}:root[data-indicators=semantic] .time-bucket{background:color-mix(in srgb,var(--event-color) 7%,var(--pane))}

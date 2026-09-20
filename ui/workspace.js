@@ -1,0 +1,28 @@
+'use strict';
+window.workspaceUI=(()=>{
+ const text=(en,ru,uk)=>({en,ru,uk})[i18n.language];
+ let indicators=localStorage.getItem('colorIndicators')==='semantic'?'semantic':'neutral';
+ function applyIndicators(){document.documentElement.dataset.indicators=indicators;}
+ applyIndicators();
+ function settings(){return `<div class="indicator-settings"><label for="colorIndicators">${text('Color indicators','Цветовая индикация','Колірна індикація')}</label><select id="colorIndicators"><option value="neutral" ${indicators==='neutral'?'selected':''}>${text('Restrained','Сдержанная','Стримана')}</option><option value="semantic" ${indicators==='semantic'?'selected':''}>${text('By event type','По типам событий','За типами подій')}</option></select><p class="muted">${text('Adds colored markers to events, graph nodes and counters. Labels remain visible; color does not confirm an inferred result.','Цветные метки событий, узлов графа и счётчиков. Подписи остаются видимыми; цвет не подтверждает предположительный результат.','Кольорові позначки подій, вузлів графа та лічильників. Підписи залишаються видимими; колір не підтверджує припустимий результат.')}</p><div class="indicator-legend">${[['decision',text('Decisions','Решения','Рішення')],['task',text('Tasks','Задачи','Завдання')],['bug',text('Errors','Ошибки','Помилки')],['milestone',text('Milestones','Вехи','Віхи')],['tool',text('Tools / research','Инструменты / исследование','Інструменти / дослідження')],['message',text('Messages','Сообщения','Повідомлення')]].map(([type,label])=>`<span class="type-${type}"><i></i>${label}</span>`).join('')}</div></div>`;}
+ document.addEventListener('change',event=>{if(event.target.id==='colorIndicators'){indicators=event.target.value==='semantic'?'semantic':'neutral';localStorage.setItem('colorIndicators',indicators);applyIndicators();}});
+ function init(){
+  for(const side of ['left','right']){
+   const pane=document.getElementById(side==='left'?'leftPanel':'inspector'),divider=document.createElement('div');
+   divider.id=side+'Splitter';divider.className='splitter';divider.tabIndex=0;divider.setAttribute('role','separator');divider.setAttribute('aria-orientation','vertical');divider.setAttribute('aria-label',text('Resize panel','Изменить ширину панели','Змінити ширину панелі'));
+   if(side==='left')pane.after(divider);else pane.before(divider);
+   const set=value=>{const min=180,max=Math.min(480,innerWidth*.32),width=Math.max(min,Math.min(max,value));pane.style.width=width+'px';localStorage.setItem(side+'PanelWidth',width);divider.setAttribute('aria-valuenow',Math.round(width));divider.setAttribute('aria-valuemin',min);divider.setAttribute('aria-valuemax',Math.floor(max));};
+   const saved=Number(localStorage.getItem(side+'PanelWidth'));if(saved)set(saved);
+   divider.addEventListener('pointerdown',e=>{divider.setPointerCapture(e.pointerId);const start=e.clientX,width=pane.getBoundingClientRect().width;const move=e=>set(width+(e.clientX-start)*(side==='left'?1:-1));const end=()=>{divider.removeEventListener('pointermove',move);divider.removeEventListener('pointerup',end);divider.removeEventListener('pointercancel',end);};divider.addEventListener('pointermove',move);divider.addEventListener('pointerup',end);divider.addEventListener('pointercancel',end);});
+   divider.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();set(pane.getBoundingClientRect().width+(e.key==='ArrowRight'?15:-15)*(side==='left'?1:-1));}});
+   window.addEventListener('resize',()=>{if(pane.style.width)set(parseFloat(pane.style.width));});
+  }
+  const dialog=document.createElement('dialog');dialog.id='commandPalette';dialog.innerHTML=`<h2>${text('Commands','Команды','Команди')}</h2><input id="commandInput" aria-label="${text('Find a command','Найти команду','Знайти команду')}" placeholder="${text('Type to filter…','Введите для поиска…','Введіть для пошуку…')}"><div id="commandResults"></div>`;document.body.append(dialog);
+  const commands=()=>[...Object.entries(viewLabels).map(([id,label])=>({label,action:()=>go(id)})),...['branches','calendar','lanes','horizontal','events'].map(mode=>({label:({branches:text('Branching history','История ветвей','Історія гілок'),calendar:text('Activity calendar','Календарь активности','Календар активності'),lanes:text('Swimlanes','Дорожки','Доріжки'),horizontal:text('Horizontal timeline','Горизонтальная шкала','Горизонтальна шкала'),events:text('Event feed','События','Події')})[mode],action:async()=>{historyUI.restore({...historyUI.options(),mode});state.view='timeline';await render();}}))];
+  const fill=()=>{const q=$('#commandInput').value.toLowerCase();$('#commandResults').replaceChildren();for(const command of commands().filter(c=>c.label.toLowerCase().includes(q))){const b=document.createElement('button');b.type='button';b.textContent=command.label;b.addEventListener('click',async()=>{dialog.close();try{await command.action();}catch(e){toast(e.message);}});$('#commandResults').append(b);}};
+  $('#commandInput').addEventListener('input',fill);
+  dialog.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='commandInput'){e.preventDefault();$('#commandResults button')?.click();}e.stopPropagation();});
+  document.addEventListener('keydown',async e=>{if($('#welcome').open)return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='p'){e.preventDefault();$('#commandInput').value='';fill();if(!dialog.open)dialog.showModal();$('#commandInput').focus();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='l'){e.preventDefault();await go('search');$('#referenceInput')?.focus();}});
+ }
+ return {init,settings};
+})();

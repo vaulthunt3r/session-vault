@@ -1,0 +1,17 @@
+{
+  "name": "session-vault",
+  "version": "1.1.0",
+  "description": "Read-only local Codex history explorer",
+  "main": "src/main.cjs",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test --test-isolation=none tests/*.test.cjs",
+    "package": "node scripts/package.cjs",
+    "smoke": "electron . --smoke"
+  },
+  "devDependencies": {
+    "electron": "44.3.0"
+  },
+  "productName": "Session Vault"
+}
